@@ -7,7 +7,7 @@
 
 export const fonts = {
   body:          'MirandaSans-Regular',   // all regular text
-  bodyMedium:    'MirandaSans-Medium',    // slightly emphasized body
+  bodyMedium:    'MirandaSans-Regular',    // slightly emphasized body
   bodyBold:      'MirandaSans-Bold',      // bold body text
 
   titleUI:       'GoogleSansFlex-Regular', // screen titles, section headers

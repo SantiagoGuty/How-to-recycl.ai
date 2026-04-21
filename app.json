@@ -18,8 +18,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0A0B1F"
       },
+      "backgroundColor": "#0A0B1F",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
@@ -27,7 +28,21 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+       [
+        "expo-camera",
+        {
+          "cameraPermission": "recycl.ai uses your camera to identify materials and scan barcodes."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "recycl.ai accesses your photo library so you can upload items to identify."
+        }
+      ],
+      
       "expo-font"
+      
     ],
     "extra": {
       "eas": {
