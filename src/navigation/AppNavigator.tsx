@@ -9,6 +9,8 @@ import ScannerScreen from '../screens/ScannerScreen';
 import ChatScreen from '../screens/ChatScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ResultScreen from '../screens/ResultScreen';
+import PreviewScreen from '../screens/PreviewScreen';
+
 import theme from '../theme/theme';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -64,6 +66,11 @@ export default function AppNavigator() {
           name="Result"
           component={ResultScreen}
           options={{ title: 'Result' }}
+        />
+        <Stack.Screen
+          name="Preview"
+          component={PreviewScreen}
+          options={{ headerShown: false }}  // full-screen, no header
         />
       </Stack.Navigator>
     </NavigationContainer>
