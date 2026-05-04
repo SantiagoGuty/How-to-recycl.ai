@@ -12,6 +12,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/Types';
 import { colors, spacing, radii, shadows, fontSizes } from '../theme/theme';
 import { textStyles, fonts } from '../theme/typography';
+import Logo from '../../assets/Recyclai_logo_v2.svg';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -132,7 +134,7 @@ export default function HomeScreen({ navigation }: Props) {
           { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
         ]}
       >
-        <LeafIcon size={72} />
+<       Logo width={130} height={130} />
 
         <Text style={styles.title}>Recycl.ai</Text>
         <Text style={styles.tagline}>
