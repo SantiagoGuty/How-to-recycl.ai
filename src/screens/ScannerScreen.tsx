@@ -181,14 +181,14 @@ export default function ScannerScreen({ navigation }: Props) {
             style={styles.sheetOption}
             onPress={() => { setSheetOpen(false); handleChooseFromLibrary(); }}
           >
-            <Text style={styles.sheetText}>🖼  Choose from Library</Text>
+            <Text style={styles.sheetText}>🌄  Choose from Library</Text>
           </TouchableOpacity>
           <View style={styles.sheetDivider} />
           <TouchableOpacity
             style={styles.sheetOption}
             onPress={() => { setSheetOpen(false); handleScanBarcode(); }}
           >
-            <Text style={styles.sheetText}>⬛  Scan Barcode</Text>
+            <Text style={styles.sheetText}>𝄃𝄃𝄂𝄂𝄀𝄁𝄃𝄂𝄂𝄃  Scan Barcode</Text>
           </TouchableOpacity>
           <View style={styles.sheetDivider} />
           <TouchableOpacity

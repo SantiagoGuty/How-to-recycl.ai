@@ -24,10 +24,11 @@ const { width, height } = Dimensions.get('window');
 
 export default function PreviewScreen({ navigation, route }: Props) {
   const { imageUri } = route.params;
-  const { coords, request: requestLocation } = useLocationPermission(); // ✅ inside
+  const { coords, request: requestLocation } = useLocationPermission(); 
 
 
-  // replace handleUsePhoto
+  //  handleUsePhoto
+  // OS permission grant will work whenever 
   const handleUsePhoto = async () => {
     const { coords: freshCoords } = await requestLocation();
     navigation.navigate('Result', {
