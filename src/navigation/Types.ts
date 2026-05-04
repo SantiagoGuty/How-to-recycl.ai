@@ -3,7 +3,11 @@ export type RootStackParamList = {
   Scanner: undefined;
   Chat: undefined;
   Profile: undefined;
-  Preview: { imageUri: string };  
-  Result: { imageUri?: string; itemName?: string };
+  Preview: { imageUri: string };
+  Result: {
+    imageUri?: string;
+    upc?: string;
+    itemName?: string;
+    coords?: { latitude: number; longitude: number };
+  };
 };
-

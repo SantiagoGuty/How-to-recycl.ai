@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
+import { useLocationPermission } from '../hooks/useLocationPermission';
 import { RootStackParamList } from '../navigation/Types';
 import { colors, spacing, radii, fontSizes } from '../theme/theme';
 
@@ -20,11 +21,19 @@ type Props = {
 
 const { width, height } = Dimensions.get('window');
 
+
 export default function PreviewScreen({ navigation, route }: Props) {
   const { imageUri } = route.params;
+  const { coords, request: requestLocation } = useLocationPermission(); // ✅ inside
 
-  const handleUsePhoto = () => {
-    navigation.navigate('Result', { imageUri });
+
+  // replace handleUsePhoto
+  const handleUsePhoto = async () => {
+    const { coords: freshCoords } = await requestLocation();
+    navigation.navigate('Result', {
+      imageUri,
+      coords: freshCoords ?? undefined,
+    });
   };
 
   const handleRetake = () => {

@@ -134,7 +134,7 @@ export default function HomeScreen({ navigation }: Props) {
       >
         <LeafIcon size={72} />
 
-        <Text style={styles.title}>recycl.ai</Text>
+        <Text style={styles.title}>Recycl.ai</Text>
         <Text style={styles.tagline}>
           Changing the world{'\n'}one can at a time
         </Text>

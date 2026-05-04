@@ -30,6 +30,8 @@ export default function ScannerScreen({ navigation }: Props) {
 
   const cameraRef = useRef<CameraView>(null);
   const [facing] = useState<CameraType>('back');
+  const [isBarcodeModeActive, setIsBarcodeModeActive] = useState(false);
+  const scanned = useRef(false);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const allGranted = cameraStatus === 'granted' && libraryStatus === 'granted';
@@ -100,7 +102,15 @@ export default function ScannerScreen({ navigation }: Props) {
   };
 
   const handleScanBarcode = () => {
-    console.log('Barcode scan — coming in S2-4');
+    scanned.current = false;       // reset guard for a fresh scan session
+    setIsBarcodeModeActive(true);  // switch camera into barcode mode
+  };
+
+  const handleBarcodeScanned = ({ data }: { data: string }) => {
+    if (scanned.current) return;   // guard: only fire once
+    scanned.current = true;
+    setIsBarcodeModeActive(false); // exit barcode mode
+    navigation.navigate('Result', { upc: data });
   };
 
   // ── Camera view ────────────────────────────────────────────────────
@@ -110,17 +120,28 @@ export default function ScannerScreen({ navigation }: Props) {
         ref={cameraRef}
         style={styles.camera}
         facing={facing}
+        barcodeScannerSettings={
+          isBarcodeModeActive
+            ? { barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e'] }
+            : undefined
+        }
+        onBarcodeScanned={isBarcodeModeActive ? handleBarcodeScanned : undefined}
       />
 
-      {/* Tap-outside backdrop — only exists when sheet is open */}
-      {sheetOpen && (
-        <Pressable
-          style={styles.backdrop}
-          onPress={() => setSheetOpen(false)}
-        />
+      {isBarcodeModeActive && (
+        <View style={styles.barcodeOverlay} pointerEvents="none">
+          <View style={styles.bracketTopLeft} />
+          <View style={styles.bracketTopRight} />
+          <View style={styles.bracketBottomLeft} />
+          <View style={styles.bracketBottomRight} />
+          <Text style={styles.barcodeHint}>Point at a barcode</Text>
+        </View>
       )}
 
-      {/* Bottom bar */}
+      {sheetOpen && (
+        <Pressable style={styles.backdrop} onPress={() => setSheetOpen(false)} />
+      )}
+
       <SafeAreaView edges={['bottom']} style={styles.bottomBar}>
         <TouchableOpacity
           style={styles.actionButton}
@@ -142,13 +163,20 @@ export default function ScannerScreen({ navigation }: Props) {
           <View style={styles.shutterInner} />
         </TouchableOpacity>
 
-        <View style={styles.spacer} />
+        {isBarcodeModeActive ? (
+          <TouchableOpacity
+            style={styles.cancelBarcodeBtn}
+            onPress={() => setIsBarcodeModeActive(false)}
+          >
+            <Text style={styles.cancelBarcodeText}>Cancel</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.spacer} />
+        )}
       </SafeAreaView>
 
-      {/* Inline sheet */}
       {sheetOpen && (
         <View style={styles.sheet}>
-
           <TouchableOpacity
             style={styles.sheetOption}
             onPress={() => { setSheetOpen(false); handleChooseFromLibrary(); }}
@@ -224,6 +252,69 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+    // ── Barcode overlay
+  barcodeOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  barcodeHint: {
+    color: '#fff',
+    fontSize: fontSizes.md,
+    backgroundColor: 'rgba(10,11,31,0.6)',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: radii.full,
+    overflow: 'hidden',
+    marginBottom: spacing.xl,
+  },
+
+  // Corner brackets — 4 absolute Views, each showing 2 sides of a corner
+  bracketTopLeft: {
+    position: 'absolute',
+    top: '28%',
+    left: '15%',
+    width: 36,
+    height: 36,
+    borderTopWidth: 3,
+    borderLeftWidth: 3,
+    borderColor: '#fff',
+    borderTopLeftRadius: 4,
+  },
+  bracketTopRight: {
+    position: 'absolute',
+    top: '28%',
+    right: '15%',
+    width: 36,
+    height: 36,
+    borderTopWidth: 3,
+    borderRightWidth: 3,
+    borderColor: '#fff',
+    borderTopRightRadius: 4,
+  },
+  bracketBottomLeft: {
+    position: 'absolute',
+    bottom: '28%',
+    left: '15%',
+    width: 36,
+    height: 36,
+    borderBottomWidth: 3,
+    borderLeftWidth: 3,
+    borderColor: '#fff',
+    borderBottomLeftRadius: 4,
+  },
+  bracketBottomRight: {
+    position: 'absolute',
+    bottom: '28%',
+    right: '15%',
+    width: 36,
+    height: 36,
+    borderBottomWidth: 3,
+    borderRightWidth: 3,
+    borderColor: '#fff',
+    borderBottomRightRadius: 4,
+  },
+
   // ── Backdrop
   backdrop: {
     ...StyleSheet.absoluteFillObject, // covers the entire screen
@@ -280,7 +371,6 @@ const styles = StyleSheet.create({
     borderRadius: radii.full,
     backgroundColor: '#fff',
   },
-  spacer: { width: 80 },
 
   // ── Inline sheet
   sheet: {
@@ -306,5 +396,20 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.border,
     marginHorizontal: spacing.xl,
+  },
+
+
+  spacer: { width: 44 },  // was 80 — must match actionButton width to center shutter
+
+  cancelBarcodeBtn: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelBarcodeText: {
+    color: '#fff',
+    fontSize: fontSizes.sm,
+    fontWeight: '600',
   },
 });
