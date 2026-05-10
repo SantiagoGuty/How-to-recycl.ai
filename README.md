@@ -5,6 +5,9 @@
 # Recycl.ai
 
 **Changing the world one can at a time.**
+</br>
+
+**Artificial intelligence applied to sustainability.**
 
 [![React Native](https://img.shields.io/badge/React_Native-0.76-20232A?style=flat-square&logo=react)](https://reactnative.dev/)
 [![Expo](https://img.shields.io/badge/Expo_SDK-52-000020?style=flat-square&logo=expo)](https://expo.dev/)
